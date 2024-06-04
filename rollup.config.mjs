@@ -88,7 +88,8 @@ const config = [{
         { src: 'src/editor/embedapi.js', dest },
         { src: 'src/editor/browser-not-supported.html', dest },
         { src: 'src/editor/browser-not-supported.js', dest },
-        { src: 'src/editor/svgedit.css', dest }
+        { src: 'src/editor/svgedit.css', dest },
+        { src: 'src/editor/ServerConfig.js', dest }
       ]
     }),
     html({

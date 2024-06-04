@@ -17,6 +17,9 @@
    */
 import { fileOpen, fileSave } from 'browser-fs-access'
 
+//import ServerConfig from '../../ServerConfig.js';
+//var cfg = new ServerConfig();
+
 const name = 'opensave'
 let handle = null
 
@@ -224,6 +227,9 @@ export default {
               fileName: 'untitled.svg',
               extensions: ['.svg']
             }, handle, throwIfExistingHandleNotGood)
+
+            
+
           } else {
             handle = await fileSave(blob, {
               fileName: svgEditor.title,
@@ -241,6 +247,53 @@ export default {
           }
         }
       }
+    }
+
+    const clickSaveToServer = async function (type) {
+      const svg = '<?xml version="1.0"?>\n' + svgCanvas.svgCanvasToString()
+      console.log(svg);
+      svgEditor.onSaveProject(svg);
+      return;
+      /**
+        const svg = '<?xml version="1.0"?>\n' + svgCanvas.svgCanvasToString()
+        console.log(svg);
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('Id');
+        const projectName = params.get('projectName');
+        const uid = params.get('uid');
+
+
+
+        const api = '/ApiV1/SaveProjectUI';
+        let dto = {
+          uid: uid,
+          projectName:projectName,
+          projectData: svg,
+          id: id
+        };
+        $.ajax({
+          contentType: "application/json; charset=utf-8",
+          cache: false, type: "post", data: JSON.stringify(dto),
+          url: svgEditor.serverConfig.ServerUrl + "/ApiV1/SaveProjectUI",
+          dataType: "json", async: false,
+          beforeSend: function () { },
+          success: function (data) {
+              console.log(data);
+              if (data.Success) {
+                  
+                alert(data.Message);
+              }
+              else {
+                  alert(data.Message);
+              }
+            },
+            error: function (request, status, e) {
+                alert(e);
+            }
+        });
+      ***/
+        
+      
     }
 
     return {
@@ -262,7 +315,9 @@ export default {
         // handler
         $click($id('tool_clear'), clickClear.bind(this))
         $click($id('tool_open'), clickOpen.bind(this))
-        $click($id('tool_save'), clickSave.bind(this, 'save'))
+        //$click($id('tool_save'), clickSave.bind(this, 'save'))
+        $click($id('tool_save'), clickSaveToServer.bind(this, 'save'));//存储到服务器上去
+
         $click($id('tool_save_as'), clickSave.bind(this, 'saveas'))
         // tool_import pressed with shiftKey will not scale the SVG
         $click($id('tool_import'), (ev) => { imgImport.shiftKey = ev.shiftKey; imgImport.click() })

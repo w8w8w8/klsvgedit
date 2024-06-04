@@ -1,6 +1,6 @@
 {
-  "name": "svgedit",
-  "version": "7.3.3",
+  "name": "@delmohf/svgedit",
+  "version": "7.3.4-alpha.3",
   "description": "Powerful SVG-Editor for your browser ",
   "main": "dist/editor/Editor.js",
   "module": "dist/editor/Editor.js",
@@ -134,7 +134,7 @@
     "rollup-plugin-html": "0.2.1",
     "rollup-plugin-progress": "1.1.2",
     "rollup-plugin-re": "1.0.7",
-    "standard": "17.1.0",
+    "standard": "^17.1.0",
     "start-server-and-test": "2.0.3"
   }
 }

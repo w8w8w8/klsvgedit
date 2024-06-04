@@ -1,26 +1,38 @@
 # SVG-Edit CHANGES
 
+## 7.3.4-alpha.3
+- Mine: Make convertUnit accessible (remove previous solution with svgcanvas class) (PR [#965](https://github.com/SVG-Edit/svgedit/pull/965))
+
+## 7.3.4-alpha.2
+- Mine: Make svgcanvas class accessible (PR [#964](https://github.com/SVG-Edit/svgedit/pull/964))
+- Mine: Fix build-docs-remove npm script (PR [#962](https://github.com/SVG-Edit/svgedit/pull/962))
+
+## 7.3.4-alpha.1
+- Mine: Fix initial stroke width (PR [#959](https://github.com/SVG-Edit/svgedit/pull/959))
+- Mine: Fix main file path in package.json (PR [#961](https://github.com/SVG-Edit/svgedit/pull/961))
+- Others: see them in repo commit [list](https://github.com/SVG-Edit/svgedit/commits/master/)
+
 ## 7.3.3
-- npm packages ugrade 
+- npm packages ugrade
 - fix export and xy panel
 
 ## 7.3.2
-- npm packages ugrade 
+- npm packages ugrade
 - refactor, fix and and put back the connector extension
 
 ## 7.3.1
-- npm packages ugrade 
+- npm packages ugrade
 - refresh Arabic language
 
 ## 7.3.0
-- bug fixes 
+- bug fixes
 - add Ukrainien and Swedish languages
 
 ## 7.2.0
-- introduce the notion of workspace 
+- introduce the notion of workspace
 - separate svgcanvas into a package
 
-**Warning: This version will break applications using svgcanvas directly. You need to change your import to "@svgedit/svgcanvas"** 
+**Warning: This version will break applications using svgcanvas directly. You need to change your import to "@svgedit/svgcanvas"**
 ## 7.1.4
 - Implement horizontal or vertical distribution alignment (mulder3062)
 - fix several bugs and update to latest dependencies
@@ -36,7 +48,7 @@
 ## 7.1.1
 - Fix an issue when moving a text with an existing transformation (issue #689)
 ## 7.1.0
-- Large refactoring of svgcanvas (a lot of remaining work with the goal to separate in its own package).This explains the move to a minor version 
+- Large refactoring of svgcanvas (a lot of remaining work with the goal to separate in its own package).This explains the move to a minor version
 - move to a new linter (standard).
 - Several issues fixed
 ## 7.0.2

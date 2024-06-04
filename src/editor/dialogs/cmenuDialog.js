@@ -82,14 +82,14 @@ export class SeCMenuDialog extends HTMLElement {
       case 'enablemenuitems':
         eles = newValue.split(',')
         eles.forEach(function (ele) {
-          const selEle = sdowRoot.querySelector('a[href*="' + ele + '"]')
+          const selEle = sdowRoot.querySelector('a[sehref*="' + ele + '"]')
           selEle.parentElement.classList.remove('disabled')
         })
         break
       case 'disablemenuitems':
         eles = newValue.split(',')
         eles.forEach(function (ele) {
-          const selEle = sdowRoot.querySelector('a[href*="' + ele + '"]')
+          const selEle = sdowRoot.querySelector('a[sehref*="' + ele + '"]')
           selEle.parentElement.classList.add('disabled')
         })
         break

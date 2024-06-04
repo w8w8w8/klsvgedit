@@ -82,7 +82,7 @@ const injectExtendedContextMenuItemIntoDom = function (menuItem) {
   }
   const shortcut = menuItem.shortcut || ''
   document.getElementById('cmenu_canvas').appendChild(`
-    <li class='disabled'><a href='#${menuItem.id}'>${menuItem.label}<span class='shortcut'>${shortcut}</span></a></li>`)
+    <li class='disabled'><a id='#${menuItem.id}'>${menuItem.label}<span class='shortcut'>${shortcut}</span></a></li>`)
 }
 
 /**

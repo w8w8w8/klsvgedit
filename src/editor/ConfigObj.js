@@ -34,7 +34,7 @@ export default class ConfigObj {
       /**
         * Default to "en" if locale.js detection does not detect another language.
         */
-      lang: 'en',
+      lang: 'zh-CN',
       /**
         * Will default to 's' if the window height is smaller than the minimum
         * height and 'm' otherwise.
@@ -135,7 +135,7 @@ export default class ConfigObj {
       extPath: './extensions',
       // DOCUMENT PROPERTIES
       // Change the following to a preference (already in the Document Properties dialog)?
-      dimensions: [640, 480],
+      dimensions: [1024, 576],
       // EDITOR OPTIONS
       // Change the following to preferences (already in the Editor Options dialog)?
       gridSnapping: false,
@@ -154,7 +154,7 @@ export default class ConfigObj {
       // EXTENSION-RELATED (GRID)
       showGrid: false, // Set by ext-grid.js
       // EXTENSION-RELATED (STORAGE)
-      noStorageOnLoad: false, // Some interaction with ext-storage.js; prevent even the loading of previously saved local storage
+      noStorageOnLoad: true, // Some interaction with ext-storage.js; prevent even the loading of previously saved local storage
       forceStorage: false, // Some interaction with ext-storage.js; strongly discouraged from modification as it bypasses user privacy by preventing them from choosing whether to keep local storage or not
       emptyStorageOnDecline: false, // Used by ext-storage.js; empty any prior storage if the user declines to store
       // EXTENSION (CLIENT VS. SERVER SAVING/OPENING)
@@ -184,7 +184,8 @@ export default class ConfigObj {
       'ext-shapes',
       'ext-polystar',
       'ext-storage',
-      'ext-opensave'
+      'ext-opensave',
+      'ext-linear',
     ]
     this.curConfig = {
       // We do not put on defaultConfig to simplify object copying

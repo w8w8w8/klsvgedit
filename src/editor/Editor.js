@@ -28,6 +28,8 @@ import LayersPanel from './panels/LayersPanel.js'
 import MainMenu from './MainMenu.js'
 import { getParentsUntil } from '@svgedit/svgcanvas/common/util.js'
 
+import ServerConfig from './ServerConfig.js';
+
 const { $id, $click, decode64 } = SvgCanvas
 
 /**
@@ -37,8 +39,12 @@ class Editor extends EditorStartup {
   /**
    *
    */
-  constructor (div = null) {
+  constructor ( _onSelectedElement ,div = null, _serverUrl=null,_onSaveProject) {
     super(div)
+
+    this.onSelectedElement = _onSelectedElement;
+    this.onSaveProject = _onSaveProject;
+
     /**
      * @type {boolean}
      */
@@ -65,6 +71,10 @@ class Editor extends EditorStartup {
     this.configObj = new ConfigObj(this)
     this.configObj.pref = this.configObj.pref.bind(this.configObj)
     this.setConfig = this.configObj.setConfig.bind(this.configObj)
+
+    this.serverConfig = new ServerConfig();
+    this.serverConfig.init(_serverUrl);
+
     this.callbacks = []
     this.curContext = null
     this.exportWindowName = null
@@ -72,30 +82,10 @@ class Editor extends EditorStartup {
     this.configObj.preferences = false
     this.canvMenu = null
     this.goodLangs = [
-      'ar',
-      'cs',
-      'de',
       'en',
-      'es',
-      'fa',
-      'fr',
-      'fy',
-      'hi',
-      'it',
-      'ja',
-      'nl',
-      'pl',
-      'pt-BR',
-      'ro',
-      'ru',
-      'sk',
-      'sl',
-      'sv',
-      'tr',
-      'uk',
       'zh-CN',
       'zh-TW'
-    ]
+    ];
 
     const modKey = isMac() ? 'meta+' : 'ctrl+'
     this.shortcuts = [
@@ -317,7 +307,7 @@ class Editor extends EditorStartup {
     ]
     this.leftPanel = new LeftPanel(this)
     this.bottomPanel = new BottomPanel(this)
-    this.topPanel = new TopPanel(this)
+    this.topPanel = new TopPanel(this,this.onSaveProject)
     this.layersPanel = new LayersPanel(this)
     this.mainMenu = new MainMenu(this)
     // makes svgEditor accessible as a global variable
@@ -335,7 +325,8 @@ class Editor extends EditorStartup {
   loadSvgString (str, { noAlert } = {}) {
     const success = this.svgCanvas.setSvgString(str) !== false
     if (success) {
-      this.updateCanvas()
+      this.updateCanvas();
+      this.layersPanel.populateLayers();
       return
     }
     if (!noAlert) seAlert(this.i18next.t('notification.errorLoadingSVG'))
@@ -685,7 +676,28 @@ class Editor extends EditorStartup {
         selectedElement: this.selectedElement,
         multiselected: this.multiselected
       }
-    )
+    );
+
+
+    var r = [];
+    if (this.multiselected) {
+        for (var a = 0; a < elems.length; a++)
+            elems[a] && r.push({
+                id: elems[a].id,
+                type: elems[a].getAttribute("type"),
+                element:elems[a]
+            });
+            this.onSelectedElement(r)
+    } 
+    else
+      this.selectedElement ? (r.push({
+                      id: this.selectedElement.id,
+                      type: this.selectedElement.getAttribute("type"),
+                      element:this.selectedElement
+                  }),
+                  this.onSelectedElement(r)) : this.onSelectedElement(null)
+
+
   }
 
   // Call when part of element is in process of changing, generally
