@@ -45,6 +45,8 @@ class Editor extends EditorStartup {
     this.onSelectedElement = _onSelectedElement;
     this.onSaveProject = _onSaveProject;
 
+    this.shapesList = [];
+
     /**
      * @type {boolean}
      */
@@ -1059,6 +1061,8 @@ class Editor extends EditorStartup {
         dy *= multi
       }
       this.svgCanvas.moveSelectedElements(dx, dy)
+
+      console.log(dx+','+dy);//移动元素
     }
   }
 
@@ -1407,6 +1411,76 @@ class Editor extends EditorStartup {
       )
     })
   }
+
+
+
+addSvgGroupFromJson = (e) => {
+
+  var t = this.svgCanvas.getElement(e.id)
+          , i = this.svgCanvas.getCurrentDrawing().getCurrentLayer();
+        t && e.group != t.tagName && (i.removeChild(t),
+        t = null),
+        t || (t = this.svgCanvas.svgdoc.createElementNS(this.svgCanvas.NS.SVG, e.group),
+        t.setAttribute("id", e.id),
+        t.setAttribute("type", e.type),
+        i && (this.svgCanvas.currentGroup || i).appendChild(t));
+
+        var cur_shape = this.svgCanvas.curShape;
+        for (var r = 0; r < e.elements.length; r++) {
+            var a = this.svgCanvas.svgdoc.createElementNS(this.svgCanvas.NS.SVG, e.elements[r].type);
+            if (this.svgCanvas.assignAttributes(a, {
+                "stroke-width": cur_shape.stroke_width,
+                "stroke-dasharray": cur_shape.stroke_dasharray,
+                "stroke-linejoin": cur_shape.stroke_linejoin,
+                "stroke-linecap": cur_shape.stroke_linecap,
+                style: "pointer-events:inherit"
+            }, 100),
+            this.svgCanvas.assignAttributes(a, e.elements[r].attr),
+            "text" === e.elements[r].type)
+                a.textContent = e.elements[r].content;
+            else if ("foreignObject" === e.elements[r].type) {
+                var s = e.elements[r].content;
+                if (s)
+                    for (var o = 0; o < s.length; o++) {
+                        var l = document.createElement(s[o].tag);
+                        if (l.tagName = l.tagName.toLowerCase(),
+                        "select" === l.tagName.toLowerCase()) {
+                            var u = document.createElement("option");
+                            u.setAttribute("test", " "),
+                            l.appendChild(u)
+                        } else
+                            "button" === l.tagName.toLowerCase() ? l.innerHTML = "button" : "span" === l.tagName.toLowerCase() && (s[o].value && (l.innerHTML = s[o].value),
+                            s[o].attr && this.svgCanvas.assignAttributes(l, s[o].attr));
+                            this.svgCanvas.assignAttributes(l, s[o].attr),
+                        s[o].style && l.setAttribute("style", s[o].style),
+                        "input" === l.tagName.toLowerCase() && (l.style.backgroundColor = cur_shape.fill,
+                        l.style.color = cur_shape.stroke),
+                        a.appendChild(l)
+                    }
+            }
+            t.appendChild(a)
+        }
+        return e.curStyles && this.svgCanvas.assignAttributes(t, {
+            fill: cur_shape.fill,
+            stroke: cur_shape.stroke,
+            "stroke-width": cur_shape.stroke_width,
+            "stroke-dasharray": cur_shape.stroke_dasharray,
+            "stroke-linejoin": cur_shape.stroke_linejoin,
+            "stroke-linecap": cur_shape.stroke_linecap,
+            style: "pointer-events:inherit"
+        }, 100),
+        this.svgCanvas.assignAttributes(t, e.attr, 100),
+        this.svgCanvas.cleanupElement(t),
+        this.svgCanvas.call("onGaugeAdded", {
+            id: e.id,
+            type: e.type
+        }),
+        t;
+
+
+}
+  
+
 
   /**
    * @function module:SVGthis.addExtension

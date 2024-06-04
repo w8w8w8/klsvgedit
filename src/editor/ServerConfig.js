@@ -3,9 +3,8 @@
 
 class ServerConfig {
 
-    ServerUrl="http://work.syfckj.cn";
+    ServerUrl="";
 
-    ServerUrl2="http://localhost:83";
 
     constructor () {
 

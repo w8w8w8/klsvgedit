@@ -216,7 +216,8 @@ class MainMenu {
    * @returns {void}
    */
   openHomePage () {
-    window.open(homePage, '_blank')
+    //window.open(homePage, '_blank')
+    
   }
 
   /**

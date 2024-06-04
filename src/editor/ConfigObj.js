@@ -114,7 +114,7 @@ export default class ConfigObj {
         opacity: 1
       },
       initStroke: {
-        width: 5,
+        width: 2,
         color: '000000', // solid black
         opacity: 1
       },
@@ -186,6 +186,7 @@ export default class ConfigObj {
       'ext-storage',
       'ext-opensave',
       'ext-linear',
+      'ext-myshapes'
     ]
     this.curConfig = {
       // We do not put on defaultConfig to simplify object copying
