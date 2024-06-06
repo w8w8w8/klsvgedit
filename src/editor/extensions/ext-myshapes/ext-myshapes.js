@@ -31,7 +31,10 @@ export default {
     var _, p, C, E, A, m = svgEditor.shapesList,  h = "SHE_", I = {}, x = "svg-ext-", w = {};
     console.log('svgEditor.shapesList',m);
     return {
-      callback: function() {S.setMode(modeId)},
+      callback: function() {
+        //S.setMode(modeId)
+        m = svgEditor.shapesList;
+      },
       mouseDown: function(e) {
 
           startX = e.start_x

@@ -32,7 +32,7 @@
 <script type="module">
   import Editor from './Editor.js'
   /* for available options see the file `docs/tutorials/ConfigOptions.md */
-  const svgEditor = new Editor(document.getElementById('container'))
+  const svgEditor = new Editor((selected) => {}, document.getElementById('container'),null,(s)=>{})
   svgEditor.setConfig({
     allowInitialUserOverride: true,
     extensions: [],

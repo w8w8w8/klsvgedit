@@ -69,7 +69,10 @@ class LayersPanel {
     $id('se-cmenu-layers-more').addEventListener('change', this.lmenuFunc.bind(this))
     $id('se-cmenu-layers-list').addEventListener('change', (e) => { this.lmenuFunc(e) })
     $click($id('sidepanel_handle'), () => this.toggleSidePanel())
-    this.toggleSidePanel(this.editor.configObj.curConfig.showlayers)
+    this.toggleSidePanel(this.editor.configObj.curConfig.showlayers);
+
+    //this.editor.$svgEditor.setIcon('layerlist td.layervis', 'eye');
+
   }
 
   toggleSidePanel (displayFlag) {
@@ -256,6 +259,13 @@ class LayersPanel {
       layerTr.className = (name === currentLayerName) ? 'layer layersel' : 'layer'
       const layerVis = document.createElement('td')
       layerVis.className = (!drawing.getLayerVisibility(name)) ? 'layerinvis layervis' : 'layervis'
+
+      const _eye = document.createElement('img');
+      _eye.src="./images/eye.svg";
+      _eye.style.width = '14px';
+      _eye.style.width = '14px';
+      layerVis.appendChild(_eye);
+
       const layerName = document.createElement('td')
       layerName.className = 'layername'
       layerName.textContent = name
