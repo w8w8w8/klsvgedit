@@ -110,7 +110,7 @@ export default class ConfigObj {
       canvasName: 'default',
       canvas_expansion: 3,
       initFill: {
-        color: 'FF0000', // solid red
+        color: 'FFFFFF', // solid red
         opacity: 1
       },
       initStroke: {
@@ -186,7 +186,10 @@ export default class ConfigObj {
       'ext-storage',
       'ext-opensave',
       'ext-linear',
-      'ext-myshapes'
+      'ext-myshapes',
+      //'ext-htmlchart',
+      //'ext-bag',
+      //'ext-ownctrl',
     ]
     this.curConfig = {
       // We do not put on defaultConfig to simplify object copying

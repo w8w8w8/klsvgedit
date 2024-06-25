@@ -39,11 +39,28 @@ class Editor extends EditorStartup {
   /**
    *
    */
-  constructor ( _onSelectedElement ,div = null, _serverUrl=null,_onSaveProject) {
+  constructor ( _onSelectedElement ,
+    div = null, 
+    _serverUrl=null,
+    _onSaveProject,
+    _changeColor, 
+    _onGaugeAdded, 
+    _onGaugeRemoved, 
+    _onGaugeResized, 
+    _onGaugeCopyPaste, 
+    _onGroupChanged
+  ) {
     super(div)
 
     this.onSelectedElement = _onSelectedElement;
     this.onSaveProject = _onSaveProject;
+    this.changeColor = _changeColor;
+    this.onGaugeAdded = _onGaugeAdded;
+    this.onGaugeResized = _onGaugeResized;
+    this.onGaugeRemoved = _onGaugeRemoved;
+    this.onGaugeCopyPaste = _onGaugeCopyPaste;
+    this.onGroupChanged = _onGroupChanged;
+
 
     this.shapesList = [];
 
@@ -312,9 +329,22 @@ class Editor extends EditorStartup {
     this.topPanel = new TopPanel(this,this.onSaveProject)
     this.layersPanel = new LayersPanel(this)
     this.mainMenu = new MainMenu(this)
+
+
+    
+
+
+
+
+
     // makes svgEditor accessible as a global variable
     window.svgEditor = this
-  } // end Constructor
+  } 
+  // end Constructor
+
+  
+
+
 
   /**
    *
@@ -1414,72 +1444,79 @@ class Editor extends EditorStartup {
 
 
 
-addSvgGroupFromJson = (e) => {
+  addSvgGroupFromJson = (e) => {
 
-  var t = this.svgCanvas.getElement(e.id)
-          , i = this.svgCanvas.getCurrentDrawing().getCurrentLayer();
-        t && e.group != t.tagName && (i.removeChild(t),
-        t = null),
-        t || (t = this.svgCanvas.svgdoc.createElementNS(this.svgCanvas.NS.SVG, e.group),
-        t.setAttribute("id", e.id),
-        t.setAttribute("type", e.type),
-        i && (this.svgCanvas.currentGroup || i).appendChild(t));
+    var t = this.svgCanvas.getElement(e.id)
+            , i = this.svgCanvas.getCurrentDrawing().getCurrentLayer();
+          t && e.group != t.tagName && (i.removeChild(t),
+          t = null),
+          t || (t = this.svgCanvas.svgdoc.createElementNS(this.svgCanvas.NS.SVG, e.group),
+          t.setAttribute("id", e.id),
+          t.setAttribute("type", e.type),
+          i && (this.svgCanvas.currentGroup || i).appendChild(t));
 
-        var cur_shape = this.svgCanvas.curShape;
-        for (var r = 0; r < e.elements.length; r++) {
-            var a = this.svgCanvas.svgdoc.createElementNS(this.svgCanvas.NS.SVG, e.elements[r].type);
-            if (this.svgCanvas.assignAttributes(a, {
-                "stroke-width": cur_shape.stroke_width,
-                "stroke-dasharray": cur_shape.stroke_dasharray,
-                "stroke-linejoin": cur_shape.stroke_linejoin,
-                "stroke-linecap": cur_shape.stroke_linecap,
-                style: "pointer-events:inherit"
-            }, 100),
-            this.svgCanvas.assignAttributes(a, e.elements[r].attr),
-            "text" === e.elements[r].type)
-                a.textContent = e.elements[r].content;
-            else if ("foreignObject" === e.elements[r].type) {
-                var s = e.elements[r].content;
-                if (s)
-                    for (var o = 0; o < s.length; o++) {
-                        var l = document.createElement(s[o].tag);
-                        if (l.tagName = l.tagName.toLowerCase(),
-                        "select" === l.tagName.toLowerCase()) {
-                            var u = document.createElement("option");
-                            u.setAttribute("test", " "),
-                            l.appendChild(u)
-                        } else
-                            "button" === l.tagName.toLowerCase() ? l.innerHTML = "button" : "span" === l.tagName.toLowerCase() && (s[o].value && (l.innerHTML = s[o].value),
-                            s[o].attr && this.svgCanvas.assignAttributes(l, s[o].attr));
-                            this.svgCanvas.assignAttributes(l, s[o].attr),
-                        s[o].style && l.setAttribute("style", s[o].style),
-                        "input" === l.tagName.toLowerCase() && (l.style.backgroundColor = cur_shape.fill,
-                        l.style.color = cur_shape.stroke),
-                        a.appendChild(l)
-                    }
-            }
-            t.appendChild(a)
-        }
-        return e.curStyles && this.svgCanvas.assignAttributes(t, {
-            fill: cur_shape.fill,
-            stroke: cur_shape.stroke,
-            "stroke-width": cur_shape.stroke_width,
-            "stroke-dasharray": cur_shape.stroke_dasharray,
-            "stroke-linejoin": cur_shape.stroke_linejoin,
-            "stroke-linecap": cur_shape.stroke_linecap,
-            style: "pointer-events:inherit"
-        }, 100),
-        this.svgCanvas.assignAttributes(t, e.attr, 100),
-        this.svgCanvas.cleanupElement(t),
-        this.svgCanvas.call("onGaugeAdded", {
-            id: e.id,
-            type: e.type
-        }),
-        t;
+          var cur_shape = this.svgCanvas.curShape;
+          for (var r = 0; r < e.elements.length; r++) {
+              var a = this.svgCanvas.svgdoc.createElementNS(this.svgCanvas.NS.SVG, e.elements[r].type);
+              if (this.svgCanvas.assignAttributes(a, {
+                  "stroke-width": cur_shape.stroke_width,
+                  "stroke-dasharray": cur_shape.stroke_dasharray,
+                  "stroke-linejoin": cur_shape.stroke_linejoin,
+                  "stroke-linecap": cur_shape.stroke_linecap,
+                  style: "pointer-events:inherit"
+              }, 100),
+              this.svgCanvas.assignAttributes(a, e.elements[r].attr),
+              "text" === e.elements[r].type)
+                  a.textContent = e.elements[r].content;
+              else if ("foreignObject" === e.elements[r].type) {
+                  var s = e.elements[r].content;
+                  if (s)
+                      for (var o = 0; o < s.length; o++) {
+                          var l = document.createElement(s[o].tag);
+                          if (l.tagName.toLowerCase() == l.tagName.toLowerCase(),
+                          "select" === l.tagName.toLowerCase()) {
+                              var u = document.createElement("option");
+                              u.setAttribute("test", " "),
+                              l.appendChild(u)
+                          } else
+                              "button" === l.tagName.toLowerCase() ? l.innerHTML = "button" : "span" === l.tagName.toLowerCase() && (s[o].value && (l.innerHTML = s[o].value),
+                              s[o].attr && this.svgCanvas.assignAttributes(l, s[o].attr));
+                              this.svgCanvas.assignAttributes(l, s[o].attr),
+                          s[o].style && l.setAttribute("style", s[o].style),
+                          "input" === l.tagName.toLowerCase() && (l.style.backgroundColor = cur_shape.fill,
+                          l.style.color = cur_shape.stroke),
+                          a.appendChild(l);
+                          if(s[o].className){
+                            l.setAttribute("class", s[o].className)
+                          }
+                      }
+              }
+              t.appendChild(a)
+          }
+          return e.curStyles && this.svgCanvas.assignAttributes(t, {
+              fill: cur_shape.fill,
+              stroke: cur_shape.stroke,
+              "stroke-width": cur_shape.stroke_width,
+              "stroke-dasharray": cur_shape.stroke_dasharray,
+              "stroke-linejoin": cur_shape.stroke_linejoin,
+              "stroke-linecap": cur_shape.stroke_linecap,
+              style: "pointer-events:inherit"
+          }, 100),
+          this.svgCanvas.assignAttributes(t, e.attr, 100),
+          this.svgCanvas.cleanupElement(t),
+          this.svgCanvas.call("onGaugeAdded", {
+              id: e.id,
+              type: e.type
+          }),
+          t;
 
 
-}
+  }
   
+
+  getSelectedElements(){
+    return this.svgCanvas.selectedElements;
+  }
 
 
   /**

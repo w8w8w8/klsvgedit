@@ -29,7 +29,7 @@ export default {
     let startX
     let startY
     var _, p, C, E, A, m = svgEditor.shapesList,  h = "SHE_", I = {}, x = "svg-ext-", w = {};
-    console.log('svgEditor.shapesList',m);
+    //console.log('svgEditor.shapesList',m);
     return {
       callback: function() {
         //S.setMode(modeId)

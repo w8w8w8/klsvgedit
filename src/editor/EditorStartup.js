@@ -147,6 +147,7 @@ class EditorStartup {
     this.rulers = new Rulers(this)
 
     this.layersPanel.populateLayers()
+
     this.selectedElement = null
     this.multiselected = false
 
@@ -204,6 +205,13 @@ class EditorStartup {
 
     this.svgCanvas.bind('beforeClear', this.beforeClear.bind(this))
     this.svgCanvas.bind('afterClear', this.afterClear.bind(this))
+
+
+    
+
+    this.svgCanvas.bind("onGaugeAdded", this.xe.bind(this));
+    this.svgCanvas.bind("onGaugeResized", this.ke.bind(this));
+    this.svgCanvas.bind("onGaugeCopyPaste", this.Se.bind(this));
 
     this.svgCanvas.textActions.setInputElem($id('text'))
 
@@ -638,6 +646,16 @@ class EditorStartup {
     // run callbacks stored by this.ready
     await this.runCallbacks()
   }
+
+  xe(e, t) {
+    this.onGaugeAdded && this.onGaugeAdded(t)
+  }
+  ke(e, t) {
+    this.onGaugeResized && this.onGaugeResized(t)
+  };
+   Se(e, t) {
+    this.onGaugeCopyPaste && this.onGaugeCopyPaste(t)
+  };
 
   /**
    * @fires module:svgcanvas.SvgCanvas#event:ext_addLangData
