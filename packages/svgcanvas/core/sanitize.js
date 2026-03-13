@@ -114,7 +114,8 @@ const svgWhiteList_ = {
   semantics: [],
 
   // HTML Elements for use in a foreignObject
-  div: [],
+  //修改了，为了适应自定义的图表插件等等
+  div: ['_echarts_instance_'],
   p: [],
   li: [],
   pre: [],
@@ -128,7 +129,35 @@ const svgWhiteList_ = {
   h3: [],
   h4: [],
   h5: [],
-  h6: []
+  h6: [],
+  table: ['style'],
+  thead: ['style'],
+  tbody: ['style'],
+  tfoot: ['style'],
+  tr: ['valign', 'align','style'],
+  td: [
+    'colspan', 'rowspan', 'align', 'valign','style'
+  ],
+  th: [
+    'colspan', 'rowspan', 'align', 'valign', 'style'
+  ],
+  // input 需要 type, placeholder, value, checked 等
+  input: ['type', 'placeholder', 'value', 'checked', 'disabled', 'readonly', 'name'],
+  // button 需要 type
+  button: ['type', 'disabled', 'name', 'value',
+	'data-action', // 关键：用于识别上一页/下一页动作
+    'data-id'
+  ],
+  // textarea 需要 placeholder, rows, cols
+  textarea: ['placeholder', 'disabled', 'readonly', 'rows', 'cols', 'name'],
+  // select 和 option
+  select: ['disabled', 'name', 'multiple'],
+  option: ['value', 'selected', 'disabled'],
+  // 其他标签如果不需要特殊属性，可以保留通用属性
+  label: ['for'],
+  canvas: ['width', 'height'],
+  checkbox: ['checked', 'disabled'], // 注意：HTML 里 checkbox 也是 input，这里如果你自定义了标签名则保留
+  radio: ['checked', 'disabled']
 }
 
 // add generic attributes to all elements of the whitelist
