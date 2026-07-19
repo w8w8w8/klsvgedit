@@ -1069,6 +1069,7 @@ const convertToGroup = elem => {
     tlist.appendItem(xform)
     recalculateDimensions(elem)
     svgCanvas.call('selected', [elem])
+    return elem
   } else if (dataStorage.has($elem, 'symbol')) {
     elem = dataStorage.get($elem, 'symbol')
     if (!elem) {
@@ -1203,8 +1204,10 @@ const convertToGroup = elem => {
     }
 
     svgCanvas.addCommandToHistory(batchCmd)
+    return g
   } else {
     warn('Unexpected element to ungroup:', elem, 'selected-elem')
+    return null
   }
 }
 
@@ -1222,11 +1225,14 @@ const ungroupSelectedElement = () => {
     return
   }
   if (dataStorage.has(g, 'gsvg') || dataStorage.has(g, 'symbol')) {
-    // Is svg, so actually convert to group
-    convertToGroup(g)
-    return
-  }
-  if (g.tagName === 'use') {
+    // Is svg (e.g. imported content), so convert to a real group first, then
+    // fall through below to actually ungroup/flatten that new group - a
+    // single Ungroup action on imported content should ungroup it, not just
+    // silently swap its <use>/gsvg wrapper for a <g> that still needs a
+    // second Ungroup to do anything.
+    g = convertToGroup(g)
+    if (!g) { return }
+  } else if (g.tagName === 'use') {
     // Somehow doesn't have data set, so retrieve
     const href = getHref(g)
     if (!href || !href.startsWith('#')) {
@@ -1240,8 +1246,8 @@ const ungroupSelectedElement = () => {
     }
     dataStorage.put(g, 'symbol', symbol)
     dataStorage.put(g, 'ref', symbol)
-    convertToGroup(g)
-    return
+    g = convertToGroup(g)
+    if (!g) { return }
   }
   const parentsA = getParents(g.parentNode, 'a')
   if (parentsA?.length) {

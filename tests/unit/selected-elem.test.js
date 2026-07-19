@@ -122,7 +122,12 @@ describe('selected-elem', () => {
     expect(order).toEqual(['title', 'defs', 'rect-bottom-2', 'rect-bottom-1'])
   })
 
-  it('ungroups a <use> when it is the first element child', () => {
+  // Regression test for https://github.com/SVG-Edit/svgedit/issues/953:
+  // a single Ungroup action on imported SVG content (represented as a <use>
+  // referencing a local <symbol>, per importSvgString()) must fully unwrap
+  // it, not just silently convert the <use> into an equivalent <g> that
+  // still requires a second Ungroup to actually flatten.
+  it('fully ungroups a <use> (imported SVG content) in a single call', () => {
     const defs = svgCanvas.getSvgContent().querySelector('defs') ||
       svgCanvas.getSvgContent().appendChild(document.createElementNS(NS.SVG, 'defs'))
 
@@ -151,10 +156,10 @@ describe('selected-elem', () => {
     expect(() => svgCanvas.ungroupSelectedElement()).not.toThrow()
 
     expect(container.querySelector('use')).toBeNull()
-    const group = container.firstElementChild
-    expect(group).toBeTruthy()
-    expect(group.tagName).toBe('g')
-    expect(group.querySelector('rect')).toBeTruthy()
+    expect(container.querySelector('g')).toBeNull()
+    const rect = container.firstElementChild
+    expect(rect).toBeTruthy()
+    expect(rect.tagName).toBe('rect')
   })
 
   it('does not crash ungrouping a <use> without href', () => {

@@ -205,7 +205,10 @@ export const changeSelectedAttributeNoUndoMethod = (attr, newValue, elems) => {
       } else if (attr === '#href') {
         setHref(elem, newValue)
       } else if (newValue) {
-        elem.setAttribute(attr, isNaN(parseFloat(newValue)) ? newValue : parseFloat(newValue))
+        // Number(), unlike parseFloat(), rejects a value with a trailing unit suffix
+        // (e.g. "10pt", "2px") instead of silently truncating it to a bare number.
+        const asNumber = Number(newValue)
+        elem.setAttribute(attr, Number.isNaN(asNumber) ? newValue : asNumber)
       } else if (typeof newValue === 'number') {
         elem.setAttribute(attr, newValue)
       } else {

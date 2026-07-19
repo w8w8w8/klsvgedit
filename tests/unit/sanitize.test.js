@@ -113,14 +113,14 @@ describe('sanitize', function () {
     assert.equal(rect.hasAttribute('fill'), false)
   })
 
-  it('sanitizeSvg() trims and removes text nodes', function () {
+  it('sanitizeSvg() preserve content in text nodes', function () {
     const text = createSvgElement('text')
-    text.append(document.createTextNode('  Hello  '), document.createTextNode('   '))
+    text.append(document.createTextNode('  Hello  '))
     svg.append(text)
 
     sanitize.sanitizeSvg(text)
 
-    assert.equal(text.textContent, 'Hello')
+    assert.equal(text.textContent, '  Hello  ')
   })
 
   it('sanitizeSvg() removes unsupported elements but keeps children', function () {

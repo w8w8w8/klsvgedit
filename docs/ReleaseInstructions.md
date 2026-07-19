@@ -11,7 +11,7 @@
 
 ## Publish to npm
 
-1. From the repo root, run `npm run publish`. The script will:
+1. From the repo root, run `npm run release`. The script will:
     - Confirm the version bump is already done.
     - Confirm `CHANGES.md` has been updated.
     - Run the full release checks (`npm run test-build` → tests, docs, and build); it exits on failure.
@@ -19,3 +19,8 @@
     - Publish all workspaces first, then the root package.
 
 You will need to be a member of the npm group to do this step.
+
+Note: this script is intentionally named `release`, not `publish` - `publish` is a
+reserved npm lifecycle hook name, and a root-level script called `publish` gets
+re-invoked by `npm publish` itself when the script's own final step publishes the
+root package, causing recursive self-invocation.
