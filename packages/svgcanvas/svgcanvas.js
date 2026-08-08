@@ -14,6 +14,10 @@ import * as pathModule from './core/path.js'
 import * as history from './core/history.js'
 import * as draw from './core/draw.js'
 import { init as pasteInit, pasteElementsMethod } from './core/paste-elem.js'
+import {
+  hasClipboardElements,
+  resetClipboardDocumentId
+} from './core/clipboard.js'
 import { init as touchInit } from './core/touch.js'
 import { svgRootElement } from './core/svgroot.js'
 import {
@@ -297,6 +301,7 @@ class SvgCanvas {
       } else if (ev.key === CLIPBOARD_ID) {
         // Another tab sent data.
         sessionStorage.setItem(CLIPBOARD_ID, ev.newValue)
+        this.call('clipboardChanged')
       }
     }
 
@@ -774,6 +779,19 @@ class SvgCanvas {
     return CLIPBOARD_ID
   }
 
+  /**
+   * Reports whether this tab has clipboard data that can be pasted.
+   * @returns {boolean} Whether the clipboard contains at least one element.
+   */
+  hasClipboardData () {
+    try {
+      const data = JSON.parse(sessionStorage.getItem(CLIPBOARD_ID))
+      return hasClipboardElements(data)
+    } catch {
+      return false
+    }
+  }
+
   getSvgContent () {
     return this.svgContent
   }
@@ -851,6 +869,7 @@ class SvgCanvas {
     this.clearSelection()
     // clear the svgcontent node
     this.clearSvgContentElement()
+    resetClipboardDocumentId(this.svgContent)
     // create new document
     this.current_drawing_ = new draw.Drawing(this.svgContent)
     // create empty first layer
@@ -946,6 +965,8 @@ class SvgCanvas {
    * @returns {void}
    */
   flashStorage () {
+    if (!this.hasClipboardData()) return
+
     const data = sessionStorage.getItem(CLIPBOARD_ID)
     localStorage.setItem(CLIPBOARD_ID, data)
     setTimeout(() => {
